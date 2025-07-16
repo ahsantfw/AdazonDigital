@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -5,17 +7,79 @@ import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { Mail, Phone, MapPin, Clock, ArrowRight, CheckCircle } from "lucide-react"
 import Link from "next/link"
+import Image from "next/image"
+import { useState } from "react"
+import emailjs from '@emailjs/browser'
 
 export default function ContactPage() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
+      email: formData.get('email'),
+      company: formData.get('company'),
+      budget: formData.get('budget'),
+      message: formData.get('message'),
+    }
+
+    try {
+      // Initialize EmailJS with your public key
+      emailjs.init("5-8ru7u7CHS1Z2pcE")
+      
+      const templateParams = {
+        to_email: 'support@adcertify.com',
+        from_name: `${data.firstName} ${data.lastName}`,
+        from_email: data.email,
+        company: data.company,
+        budget: data.budget,
+        message: data.message,
+        reply_to: data.email,
+      }
+
+      await emailjs.send(
+        'service_ey9tvz7',
+        'template_9v5ifh6',
+        templateParams
+      )
+
+      setSubmitStatus('success')
+      // Reset form safely
+      const form = e.currentTarget as HTMLFormElement
+      if (form) {
+        form.reset()
+      }
+    } catch (error) {
+      console.error('Email send failed:', error)
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
         <div className="container flex h-16 items-center justify-between px-4 md:px-6">
           <div className="flex items-center space-x-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg">
+            {/* <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg">
               AD
-            </div>
+            </div> */}
+            <Image
+              src="/logo.png"
+              alt="Adazon Digital Logo"
+              width={40}
+              height={40}
+              className="rounded-full shadow-md"
+            />
             <span className="text-xl font-bold text-gray-900">Adazon Digital</span>
           </div>
 
@@ -23,12 +87,15 @@ export default function ContactPage() {
             <Link href="/" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               Home
             </Link>
+            {/*
             <Link href="/#about" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               About
             </Link>
+            */}
             <Link href="/#services" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               Services
             </Link>
+            {/*
             <Link
               href="/#industries"
               className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
@@ -41,6 +108,7 @@ export default function ContactPage() {
             >
               Case Studies
             </Link>
+            */}
             <Link href="/contact" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
               Contact
             </Link>
@@ -54,9 +122,9 @@ export default function ContactPage() {
 
       <main>
         {/* Contact Hero */}
-        <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+        <section className="py-12 bg-gradient-to-br from-blue-50 via-white to-purple-50">
           <div className="container px-4 md:px-6">
-            <div className="text-center space-y-6 mb-16">
+            <div className="text-center space-y-6 mb-8">
               <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
                 Get In Touch
               </Badge>
@@ -64,7 +132,7 @@ export default function ContactPage() {
                 Ready to Transform Your
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
                   {" "}
-                  Advertising Strategy?
+                  Advertising?
                 </span>
               </h1>
               <p className="text-xl text-gray-600 max-w-[800px] mx-auto">
@@ -75,10 +143,10 @@ export default function ContactPage() {
         </section>
 
         {/* Contact Form & Info */}
-        <section className="py-20">
-          <div className="container px-4 md:px-6">
-            <div className="grid gap-12 lg:grid-cols-2 max-w-6xl mx-auto">
-              {/* Contact Form */}
+        <section className="py-12">
+          <div className="container px-4 md:px-6 flex justify-center">
+            <div className="w-full max-w-xl">
+              {/* Contact Form Only */}
               <Card className="border-0 shadow-xl">
                 <CardHeader>
                   <CardTitle className="text-2xl">Send Us a Message</CardTitle>
@@ -87,19 +155,19 @@ export default function ContactPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
-                  <form className="space-y-6">
+                  <form className="space-y-6" onSubmit={handleSubmit}>
                     <div className="grid gap-4 md:grid-cols-2">
                       <div className="space-y-2">
                         <label htmlFor="firstName" className="text-sm font-medium">
                           First Name *
                         </label>
-                        <Input id="firstName" placeholder="John" required />
+                        <Input id="firstName" name="firstName" placeholder="John" required />
                       </div>
                       <div className="space-y-2">
                         <label htmlFor="lastName" className="text-sm font-medium">
                           Last Name *
                         </label>
-                        <Input id="lastName" placeholder="Doe" required />
+                        <Input id="lastName" name="lastName" placeholder="Doe" required />
                       </div>
                     </div>
 
@@ -107,50 +175,71 @@ export default function ContactPage() {
                       <label htmlFor="email" className="text-sm font-medium">
                         Email Address *
                       </label>
-                      <Input id="email" type="email" placeholder="john@company.com" required />
+                      <Input id="email" name="email" type="email" placeholder="john@company.com" required />
                     </div>
 
                     <div className="space-y-2">
                       <label htmlFor="company" className="text-sm font-medium">
                         Company Name *
                       </label>
-                      <Input id="company" placeholder="Your Company" required />
+                      <Input id="company" name="company" placeholder="Your Company" required />
                     </div>
 
                     <div className="space-y-2">
                       <label htmlFor="budget" className="text-sm font-medium">
                         Monthly Advertising Budget
                       </label>
-                      <select className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                      <select name="budget" className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Select budget range</option>
+                        <option value="1k-10k">$1K - $10K</option>
+                        <option value="10k-30k">$10K - $30K</option>
                         <option value="30k-50k">$30K - $50K</option>
                         <option value="50k-100k">$50K - $100K</option>
                         <option value="100k-250k">$100K - $250K</option>
                         <option value="250k+">$250K+</option>
                       </select>
                     </div>
-
                     <div className="space-y-2">
                       <label htmlFor="message" className="text-sm font-medium">
                         Message *
                       </label>
                       <Textarea
                         id="message"
+                        name="message"
                         placeholder="Tell us about your advertising goals and challenges..."
                         className="min-h-[120px]"
                         required
                       />
                     </div>
-
-                    <Button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg py-6">
-                      Send Message
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg py-6"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
+                    
+                    {submitStatus === 'success' && (
+                      <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p className="text-green-800 text-center">
+                          Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.
+                        </p>
+                      </div>
+                    )}
+                    
+                    {submitStatus === 'error' && (
+                      <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <p className="text-red-800 text-center">
+                          Sorry, there was an error sending your message. Please try again or contact us directly.
+                        </p>
+                      </div>
+                    )}
                   </form>
                 </CardContent>
               </Card>
-
-              {/* Contact Information */}
+              {/*
+              Contact Information
               <div className="space-y-8">
                 <div>
                   <h2 className="text-2xl font-bold mb-6">Get in Touch</h2>
@@ -272,6 +361,7 @@ export default function ContactPage() {
                   </Button>
                 </div>
               </div>
+              */}
             </div>
           </div>
         </section>

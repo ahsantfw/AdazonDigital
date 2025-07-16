@@ -32,7 +32,7 @@ export default function AdazonDigitalHome() {
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
-        <div className="container flex h-16 items-center justify-between px-4 md:px-6">
+        <div className="container mx-auto max-w-screen-xl flex h-16 items-center justify-between px-4 md:px-6">
           <div className="flex items-center space-x-3">
           {/* <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-lg">
               AD
@@ -51,33 +51,56 @@ export default function AdazonDigitalHome() {
             <Link href="/" className="text-sm font-medium text-blue-600 hover:text-blue-800 transition-colors">
               Home
             </Link>
+            {/*
             <Link href="#about" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               About
             </Link>
+            */}
             <Link href="#services" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               Services
             </Link>
+            {/*
             <Link
               href="#industries"
               className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
             >
               Industries
             </Link>
+            */}
+            {/*
             <Link
               href="#case-studies"
               className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
             >
               Case Studies
             </Link>
+            */}
             <Link href="/contact" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               Contact
             </Link>
           </nav>
 
           <div className="flex items-center space-x-4">
-            <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
-              Book Consultation
+            <Button
+              asChild
+              size="lg"
+              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-lg px-8 py-6"
+            >
+              <Link href="/contact">
+                Book a Consultation
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
+            {/*
+            <Button
+              variant="outline"
+              size="lg"
+              className="text-lg px-8 py-6 bg-white/10 border-white/20 text-white hover:bg-white/20"
+            >
+              <Play className="mr-2 h-5 w-5" />
+              Watch Demo
+            </Button>
+            */}
             <Button variant="ghost" size="sm" className="md:hidden">
               <Menu className="h-5 w-5" />
             </Button>
@@ -87,7 +110,7 @@ export default function AdazonDigitalHome() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative py-20 md:py-32 overflow-hidden">
+        <section className="relative py-10 md:py-16 overflow-hidden">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0">
             <Image
@@ -107,8 +130,8 @@ export default function AdazonDigitalHome() {
             <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-cyan-400/20 rounded-full animate-pulse"></div>
           </div>
 
-          <div className="container px-4 md:px-6 relative z-10">
-            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
+          <div className="container mx-auto max-w-screen-xl px-4 md:px-6 relative z-10">
+            <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center justify-center">
               <div className="space-y-8 animate-fade-in-up">
                 <div className="space-y-6">
                   <Badge variant="secondary" className="bg-blue-50/90 text-blue-700 border-blue-200">
@@ -131,17 +154,19 @@ export default function AdazonDigitalHome() {
                     size="lg"
                     className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-lg px-8 py-6"
                   >
-                    Book a Consultation
-                    <ArrowRight className="ml-2 h-5 w-5" />
+                    <Link href="/contact" className="flex items-center">
+                      Book a Consultation
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Link>
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="outline"
                     size="lg"
                     className="text-lg px-8 py-6 bg-white/10 border-white/20 text-white hover:bg-white/20"
                   >
                     <Play className="mr-2 h-5 w-5" />
                     Watch Demo
-                  </Button>
+                  </Button> */}
                 </div>
                 <div className="flex items-center space-x-8 text-sm text-blue-200">
                   <div className="flex items-center space-x-2">
@@ -154,8 +179,41 @@ export default function AdazonDigitalHome() {
                   </div>
                 </div>
               </div>
-              <div className="relative animate-fade-in-right">
+              <div className="relative animate-fade-in-right flex items-center justify-center h-full self-center mt-0">
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-400 rounded-3xl blur-3xl opacity-30"></div>
+                <div className="relative bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-8 flex flex-col items-center justify-center max-w-md mx-auto">
+                  <h3 className="text-3xl font-bold text-blue-700 mb-2 text-center">Advertising Agency</h3>
+                  <Image
+                    src="/images/digital_marketing_croped.jpg"
+                    alt="Modern advertising agency marketing illustration"
+                    width={500}
+                    height={300}
+                    className="rounded-lg shadow-lg mb-4 w-full h-auto object-contain"
+                    priority
+                  />
+                  <p className="text-gray-700 text-center max-w-md mb-4">
+                    Expert Amazon campaign management—privacy-safe, cookie-less results.
+                  </p>
+                  <div className="flex flex-row justify-center items-end gap-6 w-full max-w-xl mt-1">
+                    <div className="flex flex-col items-center text-center">
+                      <Database className="h-7 w-7 text-blue-600 mb-1" />
+                      <span className="text-xs font-medium text-gray-700 leading-tight">First-Party<br />Data</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <Eye className="h-7 w-7 text-purple-600 mb-1" />
+                      <span className="text-xs font-medium text-gray-700 leading-tight">Cross-Device<br />Reach</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <Target className="h-7 w-7 text-cyan-600 mb-1" />
+                      <span className="text-xs font-medium text-gray-700 leading-tight">Campaign<br />Precision</span>
+                    </div>
+                    <div className="flex flex-col items-center text-center">
+                      <CheckCircle className="h-7 w-7 text-green-600 mb-1" />
+                      <span className="text-xs font-medium text-gray-700 leading-tight">Enterprise<br />Result</span>
+                    </div>
+                  </div>
+                </div>
+                {/*
                 <div className="relative bg-white/95 backdrop-blur rounded-2xl shadow-2xl p-8">
                   <div className="space-y-6">
                     <div className="flex items-center space-x-3">
@@ -183,6 +241,7 @@ export default function AdazonDigitalHome() {
                     </div>
                   </div>
                 </div>
+                */}
               </div>
             </div>
           </div>
@@ -299,18 +358,18 @@ export default function AdazonDigitalHome() {
             <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
               <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-center group animate-fade-in-up">
                 <CardHeader>
-                  <div className="relative mb-6">
+                  <div className="relative mb-4">
                     <Image
                       src="/images/deterministic-data.png"
                       alt="Deterministic Data Visualization"
-                      width={400}
-                      height={400}
+                      width={200}
+                      height={200}
                       className="rounded-lg mx-auto"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-blue-600/20 to-transparent rounded-lg"></div>
                   </div>
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <Database className="h-8 w-8 text-blue-600" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <Database className="h-6 w-6 text-blue-600" />
                   </div>
                   <CardTitle className="text-xl">Deterministic Data</CardTitle>
                   <CardDescription className="text-base">
@@ -321,18 +380,18 @@ export default function AdazonDigitalHome() {
 
               <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-center group animate-fade-in-up">
                 <CardHeader>
-                  <div className="relative mb-6">
+                  <div className="relative mb-4">
                     <Image
                       src="/images/probabilistic-insights.png"
                       alt="Probabilistic Insights Analytics"
-                      width={300}
-                      height={200}
+                      width={200}
+                      height={150}
                       className="rounded-lg mx-auto"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-purple-600/20 to-transparent rounded-lg"></div>
                   </div>
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <TrendingUp className="h-8 w-8 text-purple-600" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <TrendingUp className="h-6 w-6 text-purple-600" />
                   </div>
                   <CardTitle className="text-xl">Probabilistic Insights</CardTitle>
                   <CardDescription className="text-base">
@@ -343,18 +402,18 @@ export default function AdazonDigitalHome() {
 
               <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-center group animate-fade-in-up">
                 <CardHeader>
-                  <div className="relative mb-6">
+                  <div className="relative mb-4">
                     <Image
                       src="/images/real-time-signals.jpg"
                       alt="Real-Time Signals Dashboard"
-                      width={300}
-                      height={200}
+                      width={200}
+                      height={150}
                       className="rounded-lg mx-auto"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-orange-600/20 to-transparent rounded-lg"></div>
                   </div>
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-orange-100 mx-auto mb-4 group-hover:scale-110 transition-transform">
-                    <Clock className="h-8 w-8 text-orange-600" />
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <Clock className="h-6 w-6 text-orange-600" />
                   </div>
                   <CardTitle className="text-xl">Real-Time Signals</CardTitle>
                   <CardDescription className="text-base">
@@ -385,13 +444,13 @@ export default function AdazonDigitalHome() {
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
               <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in-up">
                 <CardHeader className="text-center">
-                  <div className="relative mb-4">
+                  <div className="relative mb-4 h-[150px] flex items-center justify-center">
                     <Image
                       src="/images/first-party-data.jpg"
                       alt="First-Party Data Access"
                       width={250}
                       height={150}
-                      className="rounded-lg mx-auto"
+                      className="rounded-lg mx-auto object-contain"
                     />
                   </div>
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 mx-auto mb-4 group-hover:scale-110 transition-transform">
@@ -406,13 +465,13 @@ export default function AdazonDigitalHome() {
 
               <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in-up">
                 <CardHeader className="text-center">
-                  <div className="relative mb-4">
+                  <div className="relative mb-4 h-[150px] flex items-center justify-center">
                     <Image
                       src="/images/cross-device-reach.jpg"
                       alt="Cross-Device Reach"
                       width={250}
                       height={150}
-                      className="rounded-lg mx-auto"
+                      className="rounded-lg mx-auto object-contain"
                     />
                   </div>
                   <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 mx-auto mb-4 group-hover:scale-110 transition-transform">
@@ -450,7 +509,7 @@ export default function AdazonDigitalHome() {
                 <CardHeader className="text-center">
                   <div className="relative mb-4">
                     <Image
-                      src="/images/custom-audience.jpg"
+                      src="/images/customer-segmentation.png"
                       alt="Custom Audience Segmentation"
                       width={250}
                       height={150}
@@ -471,6 +530,7 @@ export default function AdazonDigitalHome() {
         </section>
 
         {/* How It Works */}
+        {/*
         <section className="py-20 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 to-purple-50/30"></div>
           <div className="container px-4 md:px-6 relative">
@@ -575,8 +635,10 @@ export default function AdazonDigitalHome() {
             </div>
           </div>
         </section>
+        */}
 
         {/* Industries We Serve */}
+        {/*
         <section id="industries" className="py-20 bg-gray-50 relative">
           <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
           <div className="container px-4 md:px-6 relative">
@@ -673,6 +735,7 @@ export default function AdazonDigitalHome() {
             </div>
           </div>
         </section>
+        */}
 
         {/* Case Studies */}
         {/*
@@ -1018,7 +1081,7 @@ export default function AdazonDigitalHome() {
                       <div className="text-center">
                         <h4 className="text-xl font-semibold mb-4">Amazon's Data Advantage</h4>
                         <Image
-                          src="/images/amazon-data-ecosystem.jpg"
+                          src="/images/amazon-data-ecosystem.svg"
                           alt="Amazon Data Ecosystem"
                           width={400}
                           height={200}
@@ -1052,6 +1115,7 @@ export default function AdazonDigitalHome() {
         </section>
 
         {/* Ad Formats */}
+        {/*
         <section className="py-20 bg-gray-50 relative">
           <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
           <div className="container px-4 md:px-6 relative">
@@ -1136,6 +1200,7 @@ export default function AdazonDigitalHome() {
             </div>
           </div>
         </section>
+        */}
 
         {/* Testimonials */}
         {/*
@@ -1257,10 +1322,13 @@ export default function AdazonDigitalHome() {
                 advantage.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 text-lg px-8 py-6">
-                  Book Your Consultation
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-lg px-8 py-6">
+                  <Link href="/contact" className="flex items-center">
+                    Book Your Consultation
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
                 </Button>
+                {/*
                 <Button
                   variant="outline"
                   size="lg"
@@ -1268,6 +1336,7 @@ export default function AdazonDigitalHome() {
                 >
                   Download Case Study
                 </Button>
+                */}
               </div>
               <div className="flex items-center justify-center space-x-8 text-sm text-blue-100">
                 <div className="flex items-center space-x-2">
@@ -1304,7 +1373,7 @@ export default function AdazonDigitalHome() {
                 Future-proof your advertising with Amazon's first-party data and advanced targeting capabilities.
               </p>
               <div className="flex space-x-4">
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
+              {/* <Link href="#" className="text-gray-400 hover:text-white transition-colors">
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
                   </svg>
@@ -1313,7 +1382,8 @@ export default function AdazonDigitalHome() {
                   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
-                </Link>
+                </Link> */}
+                {/* Social icons commented out for easy reversion */}
               </div>
             </div>
 
