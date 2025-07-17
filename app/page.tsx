@@ -1,33 +1,157 @@
+"use client"
+
+import { useState } from "react"
+import emailjs from '@emailjs/browser'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import {
-  Target,
-  TrendingUp,
-  Shield,
-  Users,
-  BarChart3,
-  Zap,
-  ArrowRight,
-  CheckCircle,
-  Play,
-  Database,
-  Eye,
-  Clock,
-  Car,
-  CreditCard,
-  Building2,
-  ShoppingBag,
-  Monitor,
-  Video,
-  Smartphone,
-  Star,
-  Menu,
-} from "lucide-react"
+import { Mail, Phone, MapPin, Clock, ArrowRight, ArrowDown, CheckCircle, Play, Database, Eye, Target, TrendingUp, Shield, Users, BarChart3, Zap, Car, CreditCard, Building2, ShoppingBag, Monitor, Video, Smartphone, Star, Menu } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+
+// ContactForm component
+function ContactForm() {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+    setSubmitStatus('idle')
+    
+    const formData = new FormData(e.currentTarget)
+    const data = {
+      fullName: formData.get('fullName'),
+      email: formData.get('email'),
+      company: formData.get('company'),
+      budget: formData.get('budget'),
+      message: formData.get('message'),
+    }
+
+    try {
+      emailjs.init("5-8ru7u7CHS1Z2pcE")
+      const templateParams = {
+        to_email: 'support@adcertify.com,GinaMegas@gmail.com',
+        from_name: data.fullName,
+        from_email: data.email,
+        company: data.company,
+        budget: data.budget,
+        message: data.message,
+        reply_to: data.email,
+      }
+      await emailjs.send(
+        'service_ey9tvz7',
+        'template_9v5ifh6',
+        templateParams
+      )
+      setSubmitStatus('success')
+      const form = e.currentTarget as HTMLFormElement
+      if (form) {
+        form.reset()
+      }
+    } catch (error) {
+      console.error('Email send failed:', error)
+      setSubmitStatus('error')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="w-full max-w-xl">
+      <Card className="border-0 shadow-xl">
+        <CardHeader>
+          <CardTitle className="text-2xl">Send Us a Message</CardTitle>
+          <CardDescription className="text-base">
+            Tell us about your advertising goals and we'll get back to you within 24 hours
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <form className="space-y-6" onSubmit={handleSubmit}>
+            <div className="space-y-2">
+              <label htmlFor="fullName" className="text-sm font-medium">
+                Full Name *
+              </label>
+              <Input id="fullName" name="fullName" placeholder="John Doe" required />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email Address *
+              </label>
+              <Input id="email" name="email" type="email" placeholder="john@company.com" required />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="company" className="text-sm font-medium">
+                Company Name *
+              </label>
+              <Input id="company" name="company" placeholder="Your Company" required />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="budget" className="text-sm font-medium">
+                Monthly Advertising Budget
+              </label>
+              <select name="budget" className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Select budget range</option>
+                <option value="1k-10k">$1K - $10K</option>
+                <option value="10k-30k">$10K - $30K</option>
+                <option value="30k-50k">$30K - $50K</option>
+                <option value="50k-100k">$50K - $100K</option>
+                <option value="100k-250k">$100K - $250K</option>
+                <option value="250k+">$250K+</option>
+              </select>
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="message" className="text-sm font-medium">
+                Message (Optional)
+              </label>
+              <Textarea
+                id="message"
+                name="message"
+                placeholder="Tell us about your advertising goals and challenges..."
+                className="min-h-[120px]"
+              />
+            </div>
+            <Button 
+              type="submit" 
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg py-6"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Sending...' : 'Send Message'}
+              <ArrowDown className="ml-2 h-5 w-5" />
+            </Button>
+            {submitStatus === 'success' && (
+              <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                <p className="text-green-800 text-center">
+                  Thank you! Your message has been sent successfully. We'll get back to you within 24 hours.
+                </p>
+              </div>
+            )}
+            {submitStatus === 'error' && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-800 text-center">
+                  Sorry, there was an error sending your message. Please try again or contact us directly.
+                </p>
+              </div>
+            )}
+          </form>
+        </CardContent>
+        <div className="mt-0 text-center">
+          <span className="text-sm text-gray-500">Or Call directly: </span>
+          <a href="tel:5629009203" className="text-base font-semibold text-blue-600 hover:underline inline-block align-middle">562-900-9203</a>
+          <span className="text-sm text-gray-500"> (Gina Megas)</span>
+        </div>
+        <div className="mt-0 text-center">&nbsp;</div>
+      </Card>
+    </div>
+  )
+}
 
 export default function AdazonDigitalHome() {
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false)
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -75,7 +199,7 @@ export default function AdazonDigitalHome() {
               Case Studies
             </Link>
             */}
-            <Link href="/contact" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+            <Link href="#contact" className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
               Contact
             </Link>
           </nav>
@@ -84,11 +208,10 @@ export default function AdazonDigitalHome() {
             <Button
               asChild
               size="lg"
-              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-lg px-8 py-6"
+              className="hidden md:inline-flex bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg transition-all"
             >
-              <Link href="/contact">
+              <Link href="#contact">
                 Book a Consultation
-                <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
             {/*
@@ -154,7 +277,7 @@ export default function AdazonDigitalHome() {
                     size="lg"
                     className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-lg px-8 py-6"
                   >
-                    <Link href="/contact" className="flex items-center">
+                    <Link href="#contact" className="flex items-center">
                       Book a Consultation
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Link>
@@ -340,22 +463,22 @@ export default function AdazonDigitalHome() {
         </section>
 
         {/* Why Amazon */}
-        <section className="py-20 relative">
+        <section className="py-12 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50"></div>
           <div className="container px-4 md:px-6 relative">
-            <div className="text-center space-y-4 mb-16 animate-fade-in-up">
+            <div className="text-center space-y-4 mb-8 animate-fade-in-up">
               <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
                 The Amazon Advantage
               </Badge>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
                 Why Amazon's Data Ecosystem Wins
               </h2>
-              <p className="text-xl text-gray-600 max-w-[800px] mx-auto">
+              <p className="text-lg text-gray-600 max-w-[800px] mx-auto">
                 Amazon's first-party data and behavioral targeting capabilities set it apart in the post-cookie world
               </p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
+            <div className="grid gap-6 md:grid-cols-3 max-w-5xl mx-auto">
               <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 text-center group animate-fade-in-up">
                 <CardHeader>
                   <div className="relative mb-4">
@@ -426,22 +549,22 @@ export default function AdazonDigitalHome() {
         </section>
 
         {/* Benefits of Amazon DSP */}
-        <section id="services" className="py-20 bg-gray-50 relative">
+        <section id="services" className="py-12 bg-gray-50 relative">
           <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
           <div className="container px-4 md:px-6 relative">
-            <div className="text-center space-y-4 mb-16 animate-fade-in-up">
+            <div className="text-center space-y-4 mb-8 animate-fade-in-up">
               <Badge variant="secondary" className="bg-purple-50 text-purple-700 border-purple-200">
                 Amazon DSP Benefits
               </Badge>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
                 Unlock Amazon DSP's Full Potential
               </h2>
-              <p className="text-xl text-gray-600 max-w-[800px] mx-auto">
+              <p className="text-lg text-gray-600 max-w-[800px] mx-auto">
                 Access premium inventory and advanced targeting capabilities across Amazon's advertising ecosystem
               </p>
             </div>
 
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 group animate-fade-in-up">
                 <CardHeader className="text-center">
                   <div className="relative mb-4 h-[150px] flex items-center justify-center">
@@ -1004,25 +1127,25 @@ export default function AdazonDigitalHome() {
         */}
 
         {/* The Power of First-Party Data */}
-        <section className="py-20 bg-gradient-to-br from-blue-50 to-purple-50 relative">
+        <section className="py-12 bg-gradient-to-br from-blue-50 to-purple-50 relative">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-20 left-10 w-32 h-32 bg-blue-400/10 rounded-full animate-pulse"></div>
             <div className="absolute bottom-20 right-10 w-24 h-24 bg-purple-400/10 rounded-full animate-bounce"></div>
           </div>
           <div className="container px-4 md:px-6 relative">
-            <div className="text-center space-y-4 mb-16 animate-fade-in-up">
+            <div className="text-center space-y-4 mb-8 animate-fade-in-up">
               <Badge variant="secondary" className="bg-blue-50 text-blue-700 border-blue-200">
                 First-Party Data
               </Badge>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
                 The Power of First-Party Data
               </h2>
-              <p className="text-xl text-gray-600 max-w-[800px] mx-auto">
+              <p className="text-lg text-gray-600 max-w-[800px] mx-auto">
                 First-party data enables better targeting, personalization, and compliance in the post-cookie era
               </p>
             </div>
 
-            <div className="grid gap-12 lg:grid-cols-2 items-center max-w-6xl mx-auto">
+            <div className="grid gap-8 lg:grid-cols-2 items-center max-w-6xl mx-auto">
               <div className="space-y-8 animate-fade-in-left">
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
@@ -1304,7 +1427,7 @@ export default function AdazonDigitalHome() {
         */}
 
         {/* Final CTA */}
-        <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
+        <section className="pt-20 pb-6 bg-gradient-to-r from-blue-600 to-purple-600 relative overflow-hidden">
           {/* Background Elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute top-10 left-10 w-40 h-40 bg-white/10 rounded-full animate-pulse"></div>
@@ -1314,21 +1437,21 @@ export default function AdazonDigitalHome() {
 
           <div className="container px-4 md:px-6 text-center relative z-10">
             <div className="max-w-3xl mx-auto space-y-8 animate-fade-in-up">
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl text-white">
-                Ready to Future-Proof Your Advertising?
+              <h2 className="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl text-white">
+                Ready to Future-Proof Your Advertising strategy?
               </h2>
               <p className="text-xl text-blue-100">
                 Join enterprise brands who are already winning in the cookie-less world with Amazon's first-party data
                 advantage.
               </p>
+              {/*
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-lg px-8 py-6">
-                  <Link href="/contact" className="flex items-center">
-                    Book Your Consultation
+                  <Link href="#contact" className="flex items-center">
+                    Send Us a Message
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Link>
                 </Button>
-                {/*
                 <Button
                   variant="outline"
                   size="lg"
@@ -1336,8 +1459,9 @@ export default function AdazonDigitalHome() {
                 >
                   Download Case Study
                 </Button>
-                */}
               </div>
+              */}
+              {/*
               <div className="flex items-center justify-center space-x-8 text-sm text-blue-100">
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="h-4 w-4" />
@@ -1352,6 +1476,16 @@ export default function AdazonDigitalHome() {
                   <span>Proven results</span>
                 </div>
               </div>
+              */}
+            </div>
+          </div>
+        </section>
+
+        {/* Contact Form Section */}
+        <section id="contact" className="pt-6 pb-20 bg-gradient-to-r from-blue-600 to-purple-600 scroll-mt-20">
+          <div className="container px-4 md:px-6 flex justify-center">
+            <div className="w-full max-w-xl bg-white rounded-2xl shadow-xl p-8">
+              <ContactForm />
             </div>
           </div>
         </section>
@@ -1359,6 +1493,7 @@ export default function AdazonDigitalHome() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-16 relative">
+        {/*
         <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div className="container px-4 md:px-6 relative">
           <div className="grid gap-8 lg:grid-cols-4">
@@ -1373,17 +1508,7 @@ export default function AdazonDigitalHome() {
                 Future-proof your advertising with Amazon's first-party data and advanced targeting capabilities.
               </p>
               <div className="flex space-x-4">
-              {/* <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
-                  </svg>
-                </Link>
-                <Link href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                </Link> */}
-                {/* Social icons commented out for easy reversion */}
+                // Social icons commented out for easy reversion
               </div>
             </div>
 
@@ -1453,7 +1578,7 @@ export default function AdazonDigitalHome() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contact" className="hover:text-white transition-colors">
+                  <Link href="#contact" className="hover:text-white transition-colors">
                     Contact
                   </Link>
                 </li>
@@ -1468,6 +1593,81 @@ export default function AdazonDigitalHome() {
 
           <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
             <p>&copy; {new Date().getFullYear()} Adazon Digital. All rights reserved.</p>
+          </div>
+        </div>
+        // End of commented-out footer content
+        */}
+        <div className="text-center text-gray-400">
+          <p>© 2025 Adazon Digital. All rights reserved.</p>
+          <div className="mt-4">
+            <Dialog open={isPrivacyModalOpen} onOpenChange={setIsPrivacyModalOpen}>
+              <DialogTrigger asChild>
+                <button className="text-blue-400 hover:text-blue-300 transition-colors underline">
+                  Privacy Policy
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Privacy Policy</DialogTitle>
+                  <DialogDescription>
+                    Last updated: January 2025
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 text-sm text-gray-600">
+                  <p>
+                    At Adazon Digital, we are committed to protecting your privacy and ensuring the security of your personal information. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services.
+                  </p>
+                  
+                  <h3 className="font-semibold text-gray-900">Information We Collect</h3>
+                  <p>
+                    We may collect personal information that you voluntarily provide to us when you:
+                  </p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Fill out contact forms on our website</li>
+                    <li>Subscribe to our newsletter</li>
+                    <li>Request a consultation or quote</li>
+                    <li>Apply for employment opportunities</li>
+                  </ul>
+                  
+                  <h3 className="font-semibold text-gray-900">How We Use Your Information</h3>
+                  <p>
+                    We use the information we collect to:
+                  </p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Provide and improve our services</li>
+                    <li>Communicate with you about our services</li>
+                    <li>Send you marketing materials (with your consent)</li>
+                    <li>Comply with legal obligations</li>
+                  </ul>
+                  
+                  <h3 className="font-semibold text-gray-900">Information Sharing</h3>
+                  <p>
+                    We do not sell, trade, or otherwise transfer your personal information to third parties without your consent, except as described in this policy or as required by law.
+                  </p>
+                  
+                  <h3 className="font-semibold text-gray-900">Data Security</h3>
+                  <p>
+                    We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.
+                  </p>
+                  
+                  <h3 className="font-semibold text-gray-900">Your Rights</h3>
+                  <p>
+                    You have the right to:
+                  </p>
+                  <ul className="list-disc pl-6 space-y-1">
+                    <li>Access your personal information</li>
+                    <li>Correct inaccurate information</li>
+                    <li>Request deletion of your information</li>
+                    <li>Opt-out of marketing communications</li>
+                  </ul>
+                  
+                  <h3 className="font-semibold text-gray-900">Contact Us</h3>
+                  <p>
+                    If you have any questions about this Privacy Policy or our data practices, please contact us at privacy@adazondigital.com.
+                  </p>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </footer>
